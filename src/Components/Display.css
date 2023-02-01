@@ -1,0 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.display {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  padding: 10px;
+  font-size: 3rem;
+  color: #fff;
+  grid-column: span 4;
+  background-color: rgba(0, 0, 0, 0.2);
+}

@@ -1,0 +1,32 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.button {
+  outline: none;
+  background-color: #fff;
+  border: 0.1px solid #000;
+}
+
+.button:active {
+  background-color: #ccc;
+}
+
+.button.double {
+  grid-column: span 2;
+}
+
+.button.triple {
+  grid-column: span 3;
+}
+
+.button.operator {
+  background-color: rgb(255, 165, 0);
+  color: #fff;
+}
+
+.button.operator:active {
+  background-color: rgba(255, 165, 0, 0.8);
+}
