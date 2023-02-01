@@ -6,10 +6,12 @@ import Display from './Display';
 function Calculadora() {
   const [firstStored, setFirstStored] = useState(0)
   const [value, setValue] = useState(0)
+  const [sequence, setSequence] = useState(false)
 
   function clearValue() {
     setValue(0)
     setFirstStored(0)
+    setSequence(false)
   }
 
   function operation(label) {
@@ -19,18 +21,40 @@ function Calculadora() {
       return
     }
     setValue(firstStored + value)
+    setSequence(true)
   }
-
+  
   function insertNum(label) {
+    const valueToStrig = value.toString()
+    if (label === ',' && valueToStrig == '0.') {
+      console.log('aqui')
+      return
+    }
+    if (label === ',' && !valueToStrig.includes('.')) {
+      setValue(value + '.')
+      return
+    }
     if (value === 0) {
       setValue(parseFloat(label))
       return
     }
+    if (sequence === true) {
+      console.log('aqui')
+      setFirstStored(value)
+      setValue(parseFloat(label))
+      setSequence(false)
+      return
+    }
     setValue(parseFloat(value + label))
   }
-
+  
   function equals() {
-    if (firstStored !== 0)
+    if (firstStored === 0) {
+      return
+    }
+    setValue(value + firstStored)
+    setFirstStored(0)
+    setSequence(true)
   }
 
 
@@ -53,9 +77,9 @@ function Calculadora() {
       <Button label="2" click={insertNum} />
       <Button label="3" click={insertNum} />
       <Button label="+" operator click={operation} />
-      <Button label="0" double />
+      <Button label="0" double click={insertNum} />
       <Button label="," click={insertNum} />
-      <Button label="=" operator click={operation} />
+      <Button label="=" operator click={equals} />
     </h1>
   );
 }
