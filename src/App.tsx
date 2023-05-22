@@ -1,8 +1,13 @@
+import useThemeContext from './hooks/useThemeContext';
+
 function App() {
+	const { theme, toggleTheme } = useThemeContext();
+
 	return (
 		<>
+			<button onClick={toggleTheme}>switch</button>
 			<div>
-				<h1>hello world!</h1>
+				<h1>{theme}</h1>
 			</div>
 		</>
 	);
