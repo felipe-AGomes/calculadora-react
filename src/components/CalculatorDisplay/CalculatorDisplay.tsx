@@ -1,4 +1,5 @@
 import useThemeContext from '../../hooks/useThemeContext';
+import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
 import './CalculatorDisplay.css';
 
 export default function CalculatorDispaly() {
@@ -6,7 +7,7 @@ export default function CalculatorDispaly() {
 
 	return (
 		<div className={`display__container ${theme}`}>
-			<div className='switcher'>botão de themeswitch</div>
+			<ThemeSwitcher />
 			<div className='calc__container'>
 				<div className='calc'>
 					<span>2,999</span>

@@ -12,3 +12,7 @@
 .keyboard__container.black {
 	background: var(--black-secondary);
 }
+
+.keyboard__container.white {
+	background: var(--white-secondary);
+}
