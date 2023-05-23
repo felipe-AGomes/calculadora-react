@@ -1,3 +1,4 @@
+import './ThemeContextProvider.css'
 import React, { useState } from 'react';
 import ThemeContext from '../../contexts/ThemeContext';
 

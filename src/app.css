@@ -1,0 +1,16 @@
+.container__calculator {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	width: 100vw;
+	height: 100vh;
+}
+
+.container__calculator.white {
+	background: var(--white-background);
+}
+
+.container__calculator.black {
+	background: var(--black-background);
+}

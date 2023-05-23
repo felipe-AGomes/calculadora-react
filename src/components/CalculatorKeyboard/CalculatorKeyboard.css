@@ -1,0 +1,14 @@
+.keyboard__container {
+	display: grid;
+	grid-template-columns: repeat(4, auto);
+	align-items: center;
+	justify-content: space-between;
+	flex-grow: 1;
+
+	border-radius: 15px;
+	padding: 50px;
+}
+
+.keyboard__container.black {
+	background: var(--black-secondary);
+}

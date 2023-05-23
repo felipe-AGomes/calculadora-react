@@ -1,0 +1,21 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+:root {
+	--black-background: #d5d5d5;
+	--white-background: #f5f3f3;
+	--black-primary: #22252d;
+	--white-primary: #ffffff;
+	--black-secondary: #2a2d37;
+	--white-secondary: #f9f9f9;
+	--black-button: #282b33;
+	--white-button: #f7f7f7;
+	--black-number-primary: #eee;
+	--white-number-primary: #333;
+	--green-operators: #51bdae;
+	--red-operators: #d27f83;
+}

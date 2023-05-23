@@ -1,15 +1,14 @@
+import './app.css';
+import Calculator from './components/Calculator/Calculator';
 import useThemeContext from './hooks/useThemeContext';
 
 function App() {
-	const { theme, toggleTheme } = useThemeContext();
+	const { theme } = useThemeContext();
 
 	return (
-		<>
-			<button onClick={toggleTheme}>switch</button>
-			<div>
-				<h1>{theme}</h1>
-			</div>
-		</>
+		<div className={`container__calculator ${theme}`}>
+			<Calculator />
+		</div>
 	);
 }
 

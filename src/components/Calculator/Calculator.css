@@ -1,0 +1,19 @@
+.calculator {
+	display: flex;
+	flex-direction: column;
+	
+	position: relative;
+	width: 100%;
+	max-width: 400px;
+	height: 700px;
+	max-height: 700px;
+	border-radius: 15px;
+}
+
+.calculator.white {
+	background-color: var(--white-primary);
+}
+
+.calculator.black {
+	background-color: var(--black-primary);
+}
