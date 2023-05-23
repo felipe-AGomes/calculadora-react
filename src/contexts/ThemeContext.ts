@@ -2,7 +2,8 @@ import { createContext } from 'react';
 
 type ThemeContextProps = {
 	theme: string;
-	toggleTheme: () => void;
+	themeWhite: () => void;
+	themeBlack: () => void;
 };
 
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);

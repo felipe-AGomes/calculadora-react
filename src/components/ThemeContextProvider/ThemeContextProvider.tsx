@@ -1,4 +1,4 @@
-import './ThemeContextProvider.css'
+import './ThemeContextProvider.css';
 import React, { useState } from 'react';
 import ThemeContext from '../../contexts/ThemeContext';
 
@@ -9,12 +9,20 @@ type Props = {
 export default function ThemeContextProvider({ children }: Props) {
 	const [theme, setTheme] = useState<'black' | 'white'>('black');
 
-	function toggleTheme() {
-		setTheme(theme === 'white' ? 'black' : 'white');
+	function themeBlack() {
+		if (theme === 'black') return;
+
+		setTheme('black');
+	}
+
+	function themeWhite() {
+		if (theme === 'white') return;
+
+		setTheme('white');
 	}
 
 	return (
-		<ThemeContext.Provider value={{ theme, toggleTheme }}>
+		<ThemeContext.Provider value={{ theme, themeBlack, themeWhite }}>
 			{children}
 		</ThemeContext.Provider>
 	);
