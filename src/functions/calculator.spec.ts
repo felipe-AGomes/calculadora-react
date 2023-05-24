@@ -1,5 +1,3 @@
-type ValueProps = { n: number; operator: string };
-
 interface ICalculator {
 	add: (n1: number, n2: number) => number;
 	substract: (n1: number, n2: number) => number;
@@ -26,7 +24,7 @@ export class Calculator implements ICalculator {
 		return n1 / n2;
 	}
 	percentage(n1: number, n2: number, operator: string): number | string {
-		const percentAddAndSubstract = (n2 / 100) * n2;
+		const percentAddAndSubstract = (n2 / 100) * n1;
 		const percentMultiplyAndDivide = n2 / 100;
 		switch (operator) {
 			case '+':
@@ -68,24 +66,12 @@ describe('calculator', () => {
 			const { sut } = makeSut();
 
 			const result = sut.add(1, 1);
+			const result1 = sut.add(-10, 5);
+			const result2 = sut.add(9.99, 9.99);
 
 			expect(result).toBe(2);
-		});
-
-		it('should add if number are negative', () => {
-			const { sut } = makeSut();
-
-			const result = sut.add(-10, 5);
-
-			expect(result).toBe(-5);
-		});
-
-		it('should add if number are float', () => {
-			const { sut } = makeSut();
-
-			const result = sut.add(9.99, 9.99);
-
-			expect(result).toBeCloseTo(19.98);
+			expect(result1).toBe(-5);
+			expect(result2).toBeCloseTo(19.98);
 		});
 	});
 
@@ -94,24 +80,12 @@ describe('calculator', () => {
 			const { sut } = makeSut();
 
 			const result = sut.substract(1, 1);
+			const result1 = sut.substract(-10, 5);
+			const result2 = sut.substract(9.99, 5);
 
 			expect(result).toBe(0);
-		});
-
-		it('should substract if number are negative', () => {
-			const { sut } = makeSut();
-
-			const result = sut.substract(-10, 5);
-
-			expect(result).toBe(-15);
-		});
-
-		it('should substract if number are float', () => {
-			const { sut } = makeSut();
-
-			const result = sut.substract(9.99, 5);
-
-			expect(result).toBeCloseTo(4.99);
+			expect(result1).toBe(-15);
+			expect(result2).toBeCloseTo(4.99);
 		});
 	});
 
@@ -120,24 +94,12 @@ describe('calculator', () => {
 			const { sut } = makeSut();
 
 			const result = sut.multiply(2, 2);
+			const result1 = sut.multiply(-10, 5);
+			const result2 = sut.multiply(9.99, 5);
 
 			expect(result).toBe(4);
-		});
-
-		it('should multiply if number are negative', () => {
-			const { sut } = makeSut();
-
-			const result = sut.multiply(-10, 5);
-
-			expect(result).toBe(-50);
-		});
-
-		it('should multiply if number are float', () => {
-			const { sut } = makeSut();
-
-			const result = sut.multiply(9.99, 5);
-
-			expect(result).toBeCloseTo(49.95);
+			expect(result1).toBe(-50);
+			expect(result2).toBeCloseTo(49.95);
 		});
 	});
 
@@ -146,24 +108,12 @@ describe('calculator', () => {
 			const { sut } = makeSut();
 
 			const result = sut.divide(2, 2);
+			const result1 = sut.divide(-10, 5);
+			const result2 = sut.divide(9.99, 5);
 
 			expect(result).toBe(1);
-		});
-
-		it('should divide if number are negative', () => {
-			const { sut } = makeSut();
-
-			const result = sut.divide(-10, 5);
-
-			expect(result).toBe(-2);
-		});
-
-		it('should divide if number are float', () => {
-			const { sut } = makeSut();
-
-			const result = sut.divide(9.99, 5);
-
-			expect(result).toBeCloseTo(1.998);
+			expect(result1).toBe(-2);
+			expect(result2).toBeCloseTo(1.998);
 		});
 	});
 
@@ -172,64 +122,48 @@ describe('calculator', () => {
 			const { sut } = makeSut();
 
 			const result = sut.percentage(10, 10, '+');
+			const result1 = sut.percentage(-10, 10, '+');
+			const result2 = sut.percentage(9.99, 5, '+');
 
 			expect(result).toBe(11);
-		});
-
-		it('should add the percent if negative values', () => {
-			const { sut } = makeSut();
-
-			const result = sut.percentage(-10, 10, '+');
-
-			expect(result).toBe(-9);
+			expect(result1).toBe(-11);
+			expect(result2).toBeCloseTo(10.4895);
 		});
 
 		it('should substract the percent', () => {
 			const { sut } = makeSut();
 
 			const result = sut.percentage(10, 10, '-');
-
+			const result1 = sut.percentage(-10, 10, '-');
+			const result2 = sut.percentage(9.99, 5, '-');
+			
 			expect(result).toBe(9);
+			expect(result1).toBe(-9);
+			expect(result2).toBeCloseTo(9.4905);
 		});
-
-		it('should substract if number are negative', () => {
-			const { sut } = makeSut();
-
-			const result = sut.percentage(-10, 10, '-');
-
-			expect(result).toBe(-11);
-		});
-
+		
 		it('should multiply the percent', () => {
 			const { sut } = makeSut();
-
+			
 			const result = sut.percentage(12, 15, 'x');
-
+			const result1 = sut.percentage(-10, 10, 'x');
+			const result2 = sut.percentage(9.99, 5, 'x');
+			
 			expect(result).toBeCloseTo(1.8);
+			expect(result1).toBe(-1);
+			expect(result2).toBeCloseTo(0.4995);
 		});
-
-		it('should multiply if number are negative', () => {
-			const { sut } = makeSut();
-
-			const result = sut.percentage(-10, 10, 'x');
-
-			expect(result).toBe(-1);
-		});
-
+		
 		it('should divide the percent', () => {
 			const { sut } = makeSut();
-
+			
 			const result = sut.percentage(12, 15, '/');
-
-			expect(result).toBeCloseTo(80);
-		});
-
-		it('should divide if number are negative', () => {
-			const { sut } = makeSut();
-
-			const result = sut.percentage(-10, 10, '/');
-
-			expect(result).toBeCloseTo(-100);
+			const result1 = sut.percentage(-10, 10, '/');
+			const result2 = sut.percentage(9.99, 5, '/');
+			
+			expect(result).toBe(80);
+			expect(result1).toBe(-100);
+			expect(result2).toBeCloseTo(199.80);
 		});
 	});
 });
