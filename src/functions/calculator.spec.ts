@@ -1,61 +1,7 @@
-interface ICalculator {
-	add: (n1: number, n2: number) => number;
-	substract: (n1: number, n2: number) => number;
-	multiply: (n1: number, n2: number) => number;
-	divide: (n1: number, n2: number) => number;
-	percentage: (n1: number, n2: number, operator: string) => number | string;
-	equal: (operator: string, n1: number, n2: number) => void;
-	reset: () => void;
-	deleteOne: () => void;
-	reverseSign: () => void;
-}
-
-export class Calculator implements ICalculator {
-	add(n1: number, n2: number): number {
-		return n1 + n2;
-	}
-	substract(n1: number, n2: number): number {
-		return n1 - n2;
-	}
-	multiply(n1: number, n2: number): number {
-		return n1 * n2;
-	}
-	divide(n1: number, n2: number): number {
-		return n1 / n2;
-	}
-	percentage(n1: number, n2: number, operator: string): number | string {
-		const percentAddAndSubstract = (n2 / 100) * n1;
-		const percentMultiplyAndDivide = n2 / 100;
-		switch (operator) {
-			case '+':
-				return n1 + percentAddAndSubstract;
-			case '-':
-				return n1 - percentAddAndSubstract;
-			case 'x':
-				return n1 * percentMultiplyAndDivide;
-			case '/':
-				return n1 / percentMultiplyAndDivide;
-			default:
-				return 'Invalid operation. Choose one of the following options: addition, subtraction, multiplication, division.';
-		}
-	}
-
-	equal(operator: string, n1: number, n2: number): void {
-		console.log(n1, n2, operator);
-	}
-	reset(): void {
-		console.log();
-	}
-	deleteOne(): void {
-		console.log();
-	}
-	reverseSign(): void {
-		console.log();
-	}
-}
+import { Calculator } from "./calculator";
 
 function makeSut() {
-	const sut = new Calculator();
+	const sut = new Calculator ();
 
 	return { sut };
 }
