@@ -8,7 +8,7 @@ interface ICalculator {
 	substract: (n1: number, n2: number) => number;
 	multiply: (n1: number, n2: number) => number;
 	divide: (n1: number, n2: number) => number;
-	percentage: (n1: number, n2: number, operator: string) => number | null;
+	percentage: (n1: number, n2: number, operator: string) => number | string;
 	equal: (operator: string, n1: number, n2: number) => void;
 	reset: () => void;
 	deleteOne: () => void;
@@ -31,19 +31,21 @@ export class Calculator implements ICalculator {
 	divide(n1: number, n2: number): number {
 		return n1 / n2;
 	}
-	percentage(n1: number, n2: number, operator: string): number | null {
-		let result: number | null = null;
-		const percent = (n2 / 100) * n2;
-		console.log(percent < 0);
+	percentage(n1: number, n2: number, operator: string): number | string {
+		const percentAddAndSubstract = (n2 / 100) * n2;
+		const percentMultiplyAndDivide = n2 / 100;
 		switch (operator) {
 			case '+':
-				result = n1 + percent;
-				break;
-
+				return n1 + percentAddAndSubstract;
 			case '-':
-				result = n1 - percent;
+				return n1 - percentAddAndSubstract;
+			case 'x':
+				return n1 * percentMultiplyAndDivide;
+			case '/':
+				return n1 / percentMultiplyAndDivide;
+			default:
+				return 'Invalid operation. Choose one of the following options: addition, subtraction, multiplication, division.';
 		}
-		return result;
 	}
 
 	equal(operator: string, n1: number, n2: number): void {
@@ -196,12 +198,44 @@ describe('calculator', () => {
 			expect(result).toBe(9);
 		});
 
-		it('should spercentage if number are negative', () => {
+		it('should substract if number are negative', () => {
 			const { sut } = makeSut();
 
 			const result = sut.percentage(-10, 10, '-');
 
 			expect(result).toBe(-11);
+		});
+
+		it('should multiply the percent', () => {
+			const { sut } = makeSut();
+
+			const result = sut.percentage(12, 15, 'x');
+
+			expect(result).toBeCloseTo(1.8);
+		});
+
+		it('should multiply if number are negative', () => {
+			const { sut } = makeSut();
+
+			const result = sut.percentage(-10, 10, 'x');
+
+			expect(result).toBe(-1);
+		});
+
+		it('should divide the percent', () => {
+			const { sut } = makeSut();
+
+			const result = sut.percentage(12, 15, '/');
+
+			expect(result).toBeCloseTo(80);
+		});
+
+		it('should divide if number are negative', () => {
+			const { sut } = makeSut();
+
+			const result = sut.percentage(-10, 10, '/');
+
+			expect(result).toBeCloseTo(-100);
 		});
 	});
 });
