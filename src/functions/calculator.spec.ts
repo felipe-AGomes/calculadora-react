@@ -1,9 +1,6 @@
 type ValueProps = { n: number; operator: string };
 
 interface ICalculator {
-	values?: ValueProps[];
-	partialResult: number;
-	result: number;
 	add: (n1: number, n2: number) => number;
 	substract: (n1: number, n2: number) => number;
 	multiply: (n1: number, n2: number) => number;
@@ -16,9 +13,6 @@ interface ICalculator {
 }
 
 export class Calculator implements ICalculator {
-	values: ValueProps[] = [];
-	partialResult = 0;
-	result = 0;
 	add(n1: number, n2: number): number {
 		return n1 + n2;
 	}
