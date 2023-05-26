@@ -40,52 +40,69 @@ class CalculatorController implements ICalculatorController {
 		this.result = -this.result;
 	}
 	equal(): void {
-		const values = this.values;
-		if (values.length === 0)
+		if (this.values.length === 0) {
 			throw new Error('Deve ser inserido ao menos um valor');
-		if (typeof values[values.length - 1] === 'string')
-			throw new Error('O ultimo valor inserido não pode ser um operador');
-
-		if (values.length === 1) return (this.result = values[0]);
-
-		for (let index = 0; index < values.length; index++) {
-			let value: number;
-			switch (values[index]) {
-				case 'x':
-					value = this.calculator.multiply(values[index - 1], values[index + 1]);
-					values.splice(index - 1, 3, value);
-					index = 0;
-					break;
-				case '/':
-					value = this.calculator.divide(values[index - 1], values[index + 1]);
-					values.splice(index - 1, 3, value);
-					index = 0;
-					break;
-			}
 		}
 
-		if (values.length === 1) return (this.result = values[0]);
+		if (typeof this.values[this.values.length - 1] === 'string') {
+			throw new Error('O último valor inserido não pode ser um operador');
+		}
 
-		for (let index = 0; index < values.length; index++) {
-			switch (values[index + 1]) {
-				case '+':
-					index === 0
-						? (this.result = this.calculator.add(values[index], values[index + 2]))
-						: (this.result = this.calculator.add(this.result, values[index + 2]));
-					break;
-				case '-':
-					index === 0
-						? (this.result = this.calculator.substract(
-								values[index],
-								values[index + 2],
-						  ))
-						: (this.result = this.calculator.substract(
-								this.result,
-								values[index + 2],
-						  ));
-					break;
+		this.calculateMultiplicationAndDivision();
+		this.calculateAdditionAndSubtraction();
+	}
+
+	private calculateMultiplicationAndDivision(): void {
+		let index = 0;
+
+		while (index < this.values.length) {
+			const value = this.values[index];
+
+			if (value === 'x') {
+				const result = this.calculator.multiply(
+					this.values[index - 1],
+					this.values[index + 1],
+				);
+				this.updateValues(index - 1, 3, result);
+				index = 0;
+			} else if (value === '/') {
+				const result = this.calculator.divide(
+					this.values[index - 1],
+					this.values[index + 1],
+				);
+				this.updateValues(index - 1, 3, result);
+				index = 0;
+			} else {
+				index++;
 			}
 		}
+	}
+
+	private calculateAdditionAndSubtraction(): void {
+		let index = 0;
+		this.result = this.values[index];
+
+		while (index < this.values.length) {
+			const value = this.values[index];
+
+			if (value === '+') {
+				this.result = this.calculator.add(
+					this.result,
+					this.values[index + 1],
+				);
+			} else if (value === '-') {
+				this.result = this.calculator.substract(
+					this.result,
+					this.values[index + 1],
+				);
+			}
+
+			index++;
+		}
+	}
+
+	private updateValues(startIndex: number, count: number, value: number): void {
+		this.values.splice(startIndex, count, value);
 	}
 	deleteOne(): void {
 		console.log();
@@ -291,9 +308,23 @@ describe('CalculatorController', () => {
 			sut.add(55);
 			sut.add('x');
 			sut.add(55);
+			sut.add('/');
+			sut.add(2);
 			sut.equal();
 
-			expect(sut.result).toBe(9_150_680);
+			expect(sut.result).toBe(4_575_367.5);
+
+			sut.reset();
+			sut.add(55);
+			sut.add('x');
+			sut.add(55);
+			sut.add('/');
+			sut.add(55);
+			sut.add('/');
+			sut.add(55);
+			sut.equal();
+
+			expect(sut.result).toBe(1);
 		});
 	});
 });
