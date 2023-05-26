@@ -86,10 +86,7 @@ class CalculatorController implements ICalculatorController {
 			const value = this.values[index];
 
 			if (value === '+') {
-				this.result = this.calculator.add(
-					this.result,
-					this.values[index + 1],
-				);
+				this.result = this.calculator.add(this.result, this.values[index + 1]);
 			} else if (value === '-') {
 				this.result = this.calculator.substract(
 					this.result,
@@ -105,7 +102,7 @@ class CalculatorController implements ICalculatorController {
 		this.values.splice(startIndex, count, value);
 	}
 	deleteOne(): void {
-		console.log();
+		this.values.pop();
 	}
 }
 
@@ -115,76 +112,82 @@ const makeSut = () => {
 };
 
 describe('CalculatorController', () => {
-	it('Should add the numbers to the array "values"', () => {
-		const { sut } = makeSut();
+	describe('add', () => {
+		it('Should add the numbers to the array "values"', () => {
+			const { sut } = makeSut();
 
-		sut.add(1);
+			sut.add(1);
 
-		expect(sut.values).toEqual([1]);
-	});
+			expect(sut.values).toEqual([1]);
+		});
 
-	it('Should add the operator to the array "values"', () => {
-		const { sut } = makeSut();
+		it('Should add the operator to the array "values"', () => {
+			const { sut } = makeSut();
 
-		sut.add(1);
-		sut.add('x');
-
-		expect(sut.values).toEqual([1, 'x']);
-	});
-
-	it('should throw an error if the last element of array "values" is a number', () => {
-		const { sut } = makeSut();
-
-		sut.add(1);
-
-		expect(() => {
-			sut.add(2);
-		}).toThrow();
-		expect(sut.values).toEqual([1]);
-	});
-
-	it('Should not add the operator to the array "values" if values is empty', () => {
-		const { sut } = makeSut();
-
-		expect(() => {
+			sut.add(1);
 			sut.add('x');
-		}).toThrow();
-		expect(sut.values).toEqual([]);
+
+			expect(sut.values).toEqual([1, 'x']);
+		});
+
+		it('should throw an error if the last element of array "values" is a number', () => {
+			const { sut } = makeSut();
+
+			sut.add(1);
+
+			expect(() => {
+				sut.add(2);
+			}).toThrow();
+			expect(sut.values).toEqual([1]);
+		});
+
+		it('Should not add the operator to the array "values" if values is empty', () => {
+			const { sut } = makeSut();
+
+			expect(() => {
+				sut.add('x');
+			}).toThrow();
+			expect(sut.values).toEqual([]);
+		});
+
+		it('should throw a error if the last item of the array "values" is a operator', () => {
+			const { sut } = makeSut();
+
+			sut.add(1);
+			sut.add('x');
+
+			expect(() => {
+				sut.add('-');
+			}).toThrow();
+			expect(sut.values).toEqual([1, 'x']);
+		});
 	});
 
-	it('should throw a error if the last item of the array "values" is a operator', () => {
-		const { sut } = makeSut();
+	describe('reset', () => {
+		it('should reset all entries on the variable "values"', () => {
+			const { sut } = makeSut();
 
-		sut.add(1);
-		sut.add('x');
+			sut.add(1);
+			sut.add('x');
+			sut.add(3);
+			sut.equal();
+			sut.reset();
 
-		expect(() => {
-			sut.add('-');
-		}).toThrow();
-		expect(sut.values).toEqual([1, 'x']);
+			expect(sut.values.length).toBe(0);
+			expect(sut.result).toBe(0);
+		});
 	});
 
-	it('should reset all entries on the variable "values"', () => {
-		const { sut } = makeSut();
+	describe('reverseSign', () => {
+		it('should invert the sign', () => {
+			const { sut } = makeSut();
 
-		sut.add(1);
-		sut.add('x');
-		sut.add(3);
-		sut.equal();
-		sut.reset();
+			sut.result = -30;
 
-		expect(sut.values.length).toBe(0);
-		expect(sut.result).toBe(0);
-	});
+			sut.reverseSign();
 
-	it('should invert the sign', () => {
-		const { sut } = makeSut();
-
-		sut.result = -30;
-
-		sut.reverseSign();
-
-		expect(sut.result).toBe(30);
+			expect(sut.result).toBe(30);
+		});
 	});
 
 	describe('equal', () => {
@@ -325,6 +328,19 @@ describe('CalculatorController', () => {
 			sut.equal();
 
 			expect(sut.result).toBe(1);
+		});
+	});
+	describe('deleteOne', () => {
+		it('should delete the last element of array "values"', () => {
+			const { sut } = makeSut();
+
+			sut.add(1);
+			sut.add('x');
+			sut.add(1);
+			sut.add('-');
+			sut.deleteOne();
+
+			expect(sut.values).toEqual([1, 'x', 1]);
 		});
 	});
 });
