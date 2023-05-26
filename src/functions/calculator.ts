@@ -1,4 +1,4 @@
-interface ICalculator {
+export interface ICalculator {
 	add: (n1: number, n2: number) => number;
 	substract: (n1: number, n2: number) => number;
 	multiply: (n1: number, n2: number) => number;

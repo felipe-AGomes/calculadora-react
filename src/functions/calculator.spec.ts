@@ -1,7 +1,7 @@
-import { Calculator } from "./calculator";
+import { Calculator } from './calculator';
 
 function makeSut() {
-	const sut = new Calculator ();
+	const sut = new Calculator();
 
 	return { sut };
 }
@@ -82,34 +82,34 @@ describe('calculator', () => {
 			const result = sut.percentage(10, 10, '-');
 			const result1 = sut.percentage(-10, 10, '-');
 			const result2 = sut.percentage(9.99, 5, '-');
-			
+
 			expect(result).toBe(9);
 			expect(result1).toBe(-9);
 			expect(result2).toBeCloseTo(9.4905);
 		});
-		
+
 		it('should multiply the percent', () => {
 			const { sut } = makeSut();
-			
+
 			const result = sut.percentage(12, 15, 'x');
 			const result1 = sut.percentage(-10, 10, 'x');
 			const result2 = sut.percentage(9.99, 5, 'x');
-			
+
 			expect(result).toBeCloseTo(1.8);
 			expect(result1).toBe(-1);
 			expect(result2).toBeCloseTo(0.4995);
 		});
-		
+
 		it('should divide the percent', () => {
 			const { sut } = makeSut();
-			
+
 			const result = sut.percentage(12, 15, '/');
 			const result1 = sut.percentage(-10, 10, '/');
 			const result2 = sut.percentage(9.99, 5, '/');
-			
+
 			expect(result).toBe(80);
 			expect(result1).toBe(-100);
-			expect(result2).toBeCloseTo(199.80);
+			expect(result2).toBeCloseTo(199.8);
 		});
 	});
 });
