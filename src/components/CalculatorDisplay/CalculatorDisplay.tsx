@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import useThemeContext from '../../hooks/useThemeContext';
 import ThemeSwitcher from '../ThemeSwitcher/ThemeSwitcher';
 import './CalculatorDisplay.css';

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Calculator } from '../../functions/calculator';
 import { CalculatorController } from '../../functions/calculatorController';
 import useCalculatorContext from '../../hooks/useCalculatorContext';
@@ -71,7 +70,7 @@ export default function CalculatorButton({
 			}
 			calculatorController.deleteOne();
 			deleteOneDisplayValue();
-			console.log(displayedValue)
+			console.log(displayedValue);
 			console.log(calculatorController.values);
 		}
 	};
