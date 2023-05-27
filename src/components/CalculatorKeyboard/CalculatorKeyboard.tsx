@@ -12,46 +12,110 @@ export default function CalculatorKeyboard() {
 	return (
 		<div className={`keyboard__container ${theme}`}>
 			<CalculatorButton
+				type='reset'
+				value='AC'
 				button='AC'
 				color='green'
 			/>
 			<CalculatorButton
+				type='reverse'
+				value='+/-'
 				button={<TbPlusMinus size={20} />}
 				color='green'
 			/>
 			<CalculatorButton
+				type='percent'
+				value='%'
 				button={<FiPercent size={20} />}
 				color='green'
 			/>
 			<CalculatorButton
+				type='operator'
+				value='/'
 				button={<RiDivideFill size={21} />}
 				color='red'
 			/>
-			<CalculatorButton button='7' />
-			<CalculatorButton button='8' />
-			<CalculatorButton button='9' />
 			<CalculatorButton
+				type='num'
+				value='7'
+				button='7'
+			/>
+			<CalculatorButton
+				type='num'
+				value='8'
+				button='8'
+			/>
+			<CalculatorButton
+				type='num'
+				value='9'
+				button='9'
+			/>
+			<CalculatorButton
+				type='operator'
+				value='x'
 				button='X'
 				color='red'
 			/>
-			<CalculatorButton button='4' />
-			<CalculatorButton button='5' />
-			<CalculatorButton button='6' />
 			<CalculatorButton
+				type='num'
+				value='4'
+				button='4'
+			/>
+			<CalculatorButton
+				type='num'
+				value='5'
+				button='5'
+			/>
+			<CalculatorButton
+				type='num'
+				value='6'
+				button='6'
+			/>
+			<CalculatorButton
+				type='operator'
+				value='-'
 				button='-'
 				color='red'
 			/>
-			<CalculatorButton button='1' />
-			<CalculatorButton button='2' />
-			<CalculatorButton button='3' />
 			<CalculatorButton
+				type='num'
+				value='1'
+				button='1'
+			/>
+			<CalculatorButton
+				type='num'
+				value='2'
+				button='2'
+			/>
+			<CalculatorButton
+				type='num'
+				value='3'
+				button='3'
+			/>
+			<CalculatorButton
+				type='operator'
+				value='+'
 				button='+'
 				color='red'
 			/>
-			<CalculatorButton button={<SlReload size={20} />} />
-			<CalculatorButton button='0' />
-			<CalculatorButton button=',' />
 			<CalculatorButton
+				type='back'
+				value='back'
+				button={<SlReload size={20} />}
+			/>
+			<CalculatorButton
+				type='num'
+				value='0'
+				button='0'
+			/>
+			<CalculatorButton
+				type='dot'
+				value='.'
+				button=','
+			/>
+			<CalculatorButton
+				type='equal'
+				value='='
 				button='='
 				color='red'
 			/>
