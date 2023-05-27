@@ -6,7 +6,7 @@ type Props = {
 };
 
 export default function CalculatorContextProvider({ children }: Props) {
-	const [displayedValue, setDisplayedValue] = useState<string | null>(null);
+	const [displayedValue, setDisplayedValue] = useState<string[] | []>([]);
 	const [lastValue, setLastValue] = useState<string | null>(null);
 
 	const handleSetLastValue = (value: string) => {
@@ -21,27 +21,60 @@ export default function CalculatorContextProvider({ children }: Props) {
 		setLastValue(null);
 	};
 
-	const handleSetDisplayedValue = (value: string) => {
-		if (!displayedValue) {
-			setDisplayedValue(value);
+	const handleSetDisplayedValue = ({
+		value,
+		isNum = false,
+	}: {
+		value: string;
+		isNum: boolean;
+	}) => {
+		if (displayedValue.length === 0) {
+			setDisplayedValue([value]);
 			return;
 		}
-		setDisplayedValue(displayedValue + value);
+		if (isNum) {
+			const newDisplayedValue = [...displayedValue];
+			const lastPosition = newDisplayedValue.length - 1;
+			if (isNaN(+newDisplayedValue[lastPosition])) {
+				setDisplayedValue([...displayedValue, value]);
+				return;
+			}
+			newDisplayedValue[lastPosition] = newDisplayedValue[lastPosition] + value;
+
+			setDisplayedValue(newDisplayedValue);
+			return;
+		}
+		setDisplayedValue([...displayedValue, value]);
 	};
 
-	const clearDisplay = () => {
-		setDisplayedValue(null);
+	const clearDisplayValue = () => {
+		setDisplayedValue([]);
 		setLastValue(null);
 	};
 
-	const deleteOneDisplayValue = () => {
+	const deleteOneLastValue = () => {
 		if (!lastValue) return;
 		setLastValue(lastValue?.slice(0, -1));
 	};
 
-	const deleteOneLastValue = () => {
-		if (!displayedValue) return;
-		setDisplayedValue(displayedValue?.slice(0, -1));
+	const deleteOneDisplayValue = () => {
+		const newDisplayedValue = [...displayedValue];
+
+		if (newDisplayedValue[newDisplayedValue.length - 1].length === 1) {
+			const result = newDisplayedValue.slice(0, -1);
+			setDisplayedValue(result);
+			return;
+		}
+		const lastElement =
+			newDisplayedValue[newDisplayedValue.length - 1].toString();
+
+		const modifiedLastElement = lastElement.slice(0, -1);
+
+		const newLastElement = modifiedLastElement;
+
+		newDisplayedValue[newDisplayedValue.length - 1] = newLastElement;
+
+		setDisplayedValue(newDisplayedValue);
 	};
 
 	return (
@@ -52,7 +85,7 @@ export default function CalculatorContextProvider({ children }: Props) {
 				clearLastValue,
 				handleSetLastValue,
 				handleSetDisplayedValue,
-				clearDisplay,
+				clearDisplayValue,
 				deleteOneDisplayValue,
 				deleteOneLastValue,
 			}}

@@ -1,10 +1,16 @@
 import { createContext } from 'react';
 
 type CalculatorContextProps = {
-	displayedValue: string | null;
+	displayedValue: string[] | [];
 	lastValue: string | null;
-	handleSetDisplayedValue: (value: string) => void;
-	clearDisplay: () => void;
+	handleSetDisplayedValue: ({
+		value,
+		isNum,
+	}: {
+		value: string;
+		isNum: boolean;
+	}) => void;
+	clearDisplayValue: () => void;
 	clearLastValue: () => void;
 	handleSetLastValue: (value: string) => void;
 	deleteOneLastValue: () => void;
