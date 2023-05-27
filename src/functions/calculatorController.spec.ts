@@ -231,13 +231,19 @@ describe('CalculatorController', () => {
 		it('should delete the last element of array "values"', () => {
 			const { sut } = makeSut();
 
-			sut.add(1);
+			sut.add(1123);
 			sut.add('x');
-			sut.add(1);
+			sut.add(123);
 			sut.add('-');
 			sut.deleteOne();
-
-			expect(sut.values).toEqual([1, 'x', 1]);
+			expect(sut.values).toEqual([1123, 'x', 123]);
+			sut.deleteOne();
+			expect(sut.values).toEqual([1123, 'x', 12]);
+			sut.deleteOne();
+			sut.deleteOne();
+			expect(sut.values).toEqual([1123, 'x']);
+			sut.deleteOne();
+			expect(sut.values).toEqual([1123]);
 		});
 	});
 });

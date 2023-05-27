@@ -9,7 +9,7 @@ export interface ICalculatorController {
 }
 
 export class CalculatorController implements ICalculatorController {
-	values: string[] & number[];
+	values: (string | number)[];
 	result: number;
 
 	constructor(private readonly calculator: ICalculator) {
@@ -58,15 +58,15 @@ export class CalculatorController implements ICalculatorController {
 
 			if (value === 'x') {
 				const result = this.calculator.multiply(
-					this.values[index - 1],
-					this.values[index + 1],
+					this.values[index - 1] as number,
+					this.values[index + 1] as number,
 				);
 				this.updateValues(index - 1, 3, result);
 				index = 0;
 			} else if (value === '/') {
 				const result = this.calculator.divide(
-					this.values[index - 1],
-					this.values[index + 1],
+					this.values[index - 1] as number,
+					this.values[index + 1] as number,
 				);
 				this.updateValues(index - 1, 3, result);
 				index = 0;
@@ -78,17 +78,20 @@ export class CalculatorController implements ICalculatorController {
 
 	private calculateAdditionAndSubtraction(): void {
 		let index = 0;
-		this.result = this.values[index];
+		this.result = this.values[index] as number;
 
 		while (index < this.values.length) {
 			const value = this.values[index];
 
 			if (value === '+') {
-				this.result = this.calculator.add(this.result, this.values[index + 1]);
+				this.result = this.calculator.add(
+					this.result,
+					this.values[index + 1] as number,
+				);
 			} else if (value === '-') {
 				this.result = this.calculator.substract(
 					this.result,
-					this.values[index + 1],
+					this.values[index + 1] as number,
 				);
 			}
 
@@ -100,6 +103,20 @@ export class CalculatorController implements ICalculatorController {
 		this.values.splice(startIndex, count, value);
 	}
 	deleteOne(): void {
-		this.values.pop();
+		const newDisplayedValue = [...this.values];
+
+		if (newDisplayedValue[newDisplayedValue.length - 1].toString().length === 1) {
+			this.values = newDisplayedValue.slice(0, -1);
+			return;
+		}
+
+		const lastElement =
+			newDisplayedValue[newDisplayedValue.length - 1].toString();
+
+		const modifiedLastElement = lastElement.slice(0, -1);
+
+		newDisplayedValue[newDisplayedValue.length - 1] = +modifiedLastElement;
+
+		this.values = newDisplayedValue;
 	}
 }
