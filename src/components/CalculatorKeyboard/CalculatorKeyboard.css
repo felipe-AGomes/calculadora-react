@@ -1,9 +1,10 @@
 .keyboard__container {
 	display: grid;
-	grid-template-columns: repeat(4, auto);
+	grid-template-columns: repeat(4, 60px);
+	grid-template-rows: repeat(5, 60px);
 	align-items: center;
 	justify-content: space-between;
-	flex-grow: 1;
+	gap: 20px;
 
 	border-radius: 15px;
 	padding: 50px;
