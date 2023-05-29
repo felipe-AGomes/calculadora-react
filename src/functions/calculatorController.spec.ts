@@ -9,6 +9,30 @@ const makeSut = () => {
 };
 
 describe('CalculatorController', () => {
+	describe('pushToLastValue', () => {
+		it('should add the number passed in the last value of the "values" array', () => {
+			const { sut } = makeSut();
+
+			sut.add(11);
+			sut.add('+');
+			sut.add(1);
+			sut.pushToLastValue(2);
+
+			expect(sut.values).toEqual([11, '+', 12]);
+		});
+
+		it('should throw an error if the last value of the "values" array is a string', () => {
+			const { sut } = makeSut();
+
+			sut.add(11);
+			sut.add('+');
+
+			expect(() => {
+				sut.pushToLastValue(2);
+			}).toThrow();
+		});
+	});
+
 	describe('add', () => {
 		it('Should add the numbers to the array "values"', () => {
 			const { sut } = makeSut();
@@ -21,10 +45,10 @@ describe('CalculatorController', () => {
 		it('Should add the operator to the array "values"', () => {
 			const { sut } = makeSut();
 
-			sut.add(1);
-			sut.add('x');
+			sut.add(11);
+			sut.add('+');
 
-			expect(sut.values).toEqual([1, 'x']);
+			expect(sut.values).toEqual([11, '+']);
 		});
 
 		it('should throw an error if the last element of array "values" is a number', () => {
