@@ -6,6 +6,7 @@ export interface ICalculatorController {
 	deleteOne: () => void;
 	reverseSign: () => void;
 	add: (value: string | number) => void;
+	pushToLastValue: (value: number) => void;
 }
 
 export class CalculatorController implements ICalculatorController {
@@ -17,17 +18,31 @@ export class CalculatorController implements ICalculatorController {
 		this.result = 0;
 	}
 
+	pushToLastValue(value: number): void {
+		const lastElement = this.values[this.values.length - 1];
+		if (typeof lastElement === 'string') {
+			throw new Error('Esse metodo deve ser utilizado apenas com números');
+		}
+		const newLastElement = lastElement.toString() + value.toString();
+		this.values[this.values.length - 1] = +newLastElement;
+	}
+
 	add(value: string | number): void {
+		console.log('adicionando no controller: ', value);
+
 		if (typeof value === 'number') {
-			if (typeof this.values[this.values.length - 1] === 'number')
+			if (typeof this.values[this.values.length - 1] === 'number') {
 				throw new Error('Deve ser inserido um operador após o número');
-			this.values.push(value);
+			}
+			this.values = [...this.values, value];
 		} else if (typeof value === 'string') {
-			if (typeof this.values[this.values.length - 1] === 'string')
+			if (typeof this.values[this.values.length - 1] === 'string') {
 				throw new Error('Deve ser inserido um número após um operador');
-			if (this.values.length === 0)
+			}
+			if (this.values.length === 0) {
 				throw new Error('O primeiro elemento deve ser um número');
-			this.values.push(value);
+			}
+			this.values = [...this.values, value];
 		}
 	}
 	reset(): void {
@@ -103,10 +118,16 @@ export class CalculatorController implements ICalculatorController {
 		this.values.splice(startIndex, count, value);
 	}
 	deleteOne(): void {
+		console.log('esse é o valor antes de ser deletado: ', this.values);
 		const newDisplayedValue = [...this.values];
+		if (newDisplayedValue.length === 0) {
+			console.log('esse é o valor após de ser deletado: ', this.values);
+			return;
+		}
 
 		if (newDisplayedValue[newDisplayedValue.length - 1].toString().length === 1) {
 			this.values = newDisplayedValue.slice(0, -1);
+			console.log('esse é o valor após de ser deletado: ', this.values);
 			return;
 		}
 
@@ -118,5 +139,6 @@ export class CalculatorController implements ICalculatorController {
 		newDisplayedValue[newDisplayedValue.length - 1] = +modifiedLastElement;
 
 		this.values = newDisplayedValue;
+		console.log('esse é o valor após de ser deletado: ', this.values);
 	}
 }
