@@ -28,8 +28,6 @@ export class CalculatorController implements ICalculatorController {
 	}
 
 	add(value: string | number): void {
-		console.log('adicionando no controller: ', value);
-
 		if (typeof value === 'number') {
 			if (typeof this.values[this.values.length - 1] === 'number') {
 				throw new Error('Deve ser inserido um operador após o número');
@@ -118,16 +116,13 @@ export class CalculatorController implements ICalculatorController {
 		this.values.splice(startIndex, count, value);
 	}
 	deleteOne(): void {
-		console.log('esse é o valor antes de ser deletado: ', this.values);
 		const newDisplayedValue = [...this.values];
 		if (newDisplayedValue.length === 0) {
-			console.log('esse é o valor após de ser deletado: ', this.values);
 			return;
 		}
 
 		if (newDisplayedValue[newDisplayedValue.length - 1].toString().length === 1) {
 			this.values = newDisplayedValue.slice(0, -1);
-			console.log('esse é o valor após de ser deletado: ', this.values);
 			return;
 		}
 
@@ -139,6 +134,5 @@ export class CalculatorController implements ICalculatorController {
 		newDisplayedValue[newDisplayedValue.length - 1] = +modifiedLastElement;
 
 		this.values = newDisplayedValue;
-		console.log('esse é o valor após de ser deletado: ', this.values);
 	}
 }
