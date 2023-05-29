@@ -3,7 +3,7 @@ import useCalculatorContext from './useCalculatorContext';
 export default function useDisplayedValue() {
 	const { displayedValue, setDisplayedValue, setLastValue } =
 		useCalculatorContext();
-	const deleteOneDisplayValue = () => {
+	const deleteOneDisplayedValue = () => {
 		const newDisplayedValue = [...displayedValue];
 
 		if (newDisplayedValue.length === 0) {
@@ -23,7 +23,7 @@ export default function useDisplayedValue() {
 		setDisplayedValue(newDisplayedValue);
 	};
 
-	const clearDisplayValue = () => {
+	const clearDisplayedValue = () => {
 		setDisplayedValue([]);
 		setLastValue(null);
 	};
@@ -50,5 +50,9 @@ export default function useDisplayedValue() {
 		setDisplayedValue([...displayedValue, value]);
 	};
 
-	return { clearDisplayValue, deleteOneDisplayValue, handleSetDisplayedValue };
+	return {
+		clearDisplayedValue,
+		deleteOneDisplayedValue,
+		handleSetDisplayedValue,
+	};
 }
