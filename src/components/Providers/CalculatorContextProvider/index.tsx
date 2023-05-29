@@ -54,11 +54,17 @@ export default function CalculatorContextProvider({ children }: Props) {
 
 	const deleteOneLastValue = () => {
 		if (!lastValue) return;
-		setLastValue(lastValue?.slice(0, -1));
+		setLastValue(lastValue.slice(0, -1));
 	};
 
 	const deleteOneDisplayValue = () => {
 		const newDisplayedValue = [...displayedValue];
+
+
+		if (newDisplayedValue.length === 0) {
+			setDisplayedValue([]);
+			return;
+		}
 
 		if (newDisplayedValue[newDisplayedValue.length - 1].length === 1) {
 			const result = newDisplayedValue.slice(0, -1);

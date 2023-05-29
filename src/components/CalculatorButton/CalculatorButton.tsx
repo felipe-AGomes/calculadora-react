@@ -21,6 +21,7 @@ type Props = {
 };
 
 const calculatorController = new CalculatorController(new Calculator());
+
 export default function CalculatorButton({
 	button,
 	color = 'white',
@@ -40,18 +41,38 @@ export default function CalculatorButton({
 	} = useCalculatorContext();
 
 	const handleClick = () => {
-		if (!displayedValue && type === 'operator') {
-			return;
-		}
 		if (type === 'num') {
 			handleSetDisplayedValue({ value, isNum: true });
 			handleSetLastValue(value);
 			return;
 		}
-		if (type === 'operator' && displayedValue && lastValue) {
-			handleSetDisplayedValue({ value, isNum: false });
+		if (type === 'operator' && displayedValue.length > 0) {
+			const operators = ['+', '-', 'x', '/'];
+
+			if (operators.includes(displayedValue[displayedValue.length - 1])) {
+				return;
+			}
+			if (!lastValue) {
+				calculatorController.add(value);
+				handleSetDisplayedValue({ value, isNum: false });
+				return;
+			}
+
+			if (
+				typeof calculatorController.values[
+					calculatorController.values.length - 1
+				] === 'number'
+			) {
+				calculatorController.pushToLastValue(+lastValue);
+				calculatorController.add(value);
+				handleSetDisplayedValue({ value, isNum: true });
+				clearLastValue();
+				return;
+			}
+
 			calculatorController.add(+lastValue);
 			calculatorController.add(value);
+			handleSetDisplayedValue({ value, isNum: false });
 			clearLastValue();
 			return;
 		}
@@ -62,15 +83,21 @@ export default function CalculatorButton({
 			return;
 		}
 		if (type === 'back') {
+			if (displayedValue.length === 0) {
+				return;
+			}
+
 			if (lastValue) {
 				deleteOneDisplayValue();
 				deleteOneLastValue();
-				console.log(calculatorController.values);
 				return;
 			}
+
 			calculatorController.deleteOne();
 			deleteOneDisplayValue();
-			console.log(displayedValue);
+			return;
+		}
+		if (type === 'equal') {
 			console.log(calculatorController.values);
 		}
 	};
