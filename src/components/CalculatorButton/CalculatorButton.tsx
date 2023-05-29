@@ -1,3 +1,4 @@
+import { HistoricProps } from '../../contexts/CalculatorContext';
 import { Calculator } from '../../functions/calculator';
 import { CalculatorController } from '../../functions/calculatorController';
 import useCalculatorContext from '../../hooks/useCalculatorContext';
@@ -31,20 +32,51 @@ export default function CalculatorButton({
 	type,
 }: Props) {
 	const { theme } = useThemeContext();
-	const { displayedValue, lastValue } = useCalculatorContext();
+	const {
+		displayedValue,
+		lastValue,
+		setDisplayedValue,
+		setResult,
+		result,
+		historic,
+		setHistoric,
+	} = useCalculatorContext();
 	const { clearLastValue, deleteOneLastValue, handleSetLastValue } =
 		useLastValue();
-	const { clearDisplayValue, deleteOneDisplayValue, handleSetDisplayedValue } =
-		useDisplayedValue();
+	const {
+		clearDisplayedValue,
+		deleteOneDisplayedValue,
+		handleSetDisplayedValue,
+	} = useDisplayedValue();
 
 	const handleClick = () => {
 		if (type === 'num') {
+			if (result) {
+				const newHistoric = [...historic];
+				newHistoric[newHistoric.length - 1].result = `= ${result}`;
+				setHistoric(newHistoric);
+				setResult(null);
+				setDisplayedValue([value]);
+				handleSetLastValue(value);
+				return;
+			}
 			handleSetDisplayedValue({ value, isNum: true });
 			handleSetLastValue(value);
 			return;
 		}
 		if (type === 'operator' && displayedValue.length > 0) {
 			const operators = ['+', '-', 'x', '/'];
+
+			if (result) {
+				calculatorController.add(+result);
+				calculatorController.add(value);
+				const newHistoric = [...historic];
+				newHistoric[newHistoric.length - 1].result = `= ${result}`;
+				setHistoric(newHistoric);
+				setResult(null);
+				handleSetDisplayedValue({ value, isNum: false });
+				return;
+			}
 
 			if (operators.includes(displayedValue[displayedValue.length - 1])) {
 				return;
@@ -66,7 +98,6 @@ export default function CalculatorButton({
 				clearLastValue();
 				return;
 			}
-
 			calculatorController.add(+lastValue);
 			calculatorController.add(value);
 			handleSetDisplayedValue({ value, isNum: false });
@@ -74,8 +105,10 @@ export default function CalculatorButton({
 			return;
 		}
 		if (type === 'reset') {
-			clearDisplayValue();
+			clearDisplayedValue();
 			clearLastValue();
+			setHistoric([]);
+			setResult(null);
 			calculatorController.reset();
 			return;
 		}
@@ -85,17 +118,33 @@ export default function CalculatorButton({
 			}
 
 			if (lastValue) {
-				deleteOneDisplayValue();
+				deleteOneDisplayedValue();
 				deleteOneLastValue();
 				return;
 			}
-
 			calculatorController.deleteOne();
-			deleteOneDisplayValue();
+			deleteOneDisplayedValue();
 			return;
 		}
 		if (type === 'equal') {
-			console.log(calculatorController.values);
+			if (lastValue) {
+				calculatorController.add(+lastValue);
+			}
+
+			calculatorController.equal();
+			setHistoric([
+				...historic,
+				{
+					result: null,
+					values: [...calculatorController.values],
+				} as HistoricProps,
+			]);
+			clearDisplayedValue();
+			clearLastValue();
+			setDisplayedValue([...calculatorController.result.toString()]);
+			setResult(calculatorController.result.toString());
+
+			calculatorController.reset();
 		}
 	};
 
