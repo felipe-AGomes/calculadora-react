@@ -23,7 +23,8 @@ type Props = {
 	color?: 'green' | 'red' | 'white';
 };
 
-const calculatorController = new CalculatorController(new Calculator());
+const calculator = new Calculator();
+const calculatorController = new CalculatorController(calculator);
 
 export default function CalculatorButton({
 	button,
@@ -35,10 +36,10 @@ export default function CalculatorButton({
 	const {
 		displayedValue,
 		lastValue,
-		setDisplayedValue,
-		setResult,
 		result,
 		historic,
+		setResult,
+		setDisplayedValue,
 		setHistoric,
 	} = useCalculatorContext();
 	const { clearLastValue, deleteOneLastValue, handleSetLastValue } =
@@ -50,101 +51,105 @@ export default function CalculatorButton({
 	} = useDisplayedValue();
 
 	const handleClick = () => {
-		if (type === 'num') {
-			if (result) {
-				const newHistoric = [...historic];
-				newHistoric[newHistoric.length - 1].result = `= ${result}`;
-				setHistoric(newHistoric);
-				setResult(null);
-				setDisplayedValue([value]);
-				handleSetLastValue(value);
-				return;
-			}
-			handleSetDisplayedValue({ value, isNum: true });
-			handleSetLastValue(value);
-			return;
-		}
-		if (type === 'operator' && displayedValue.length > 0) {
-			const operators = ['+', '-', 'x', '/'];
-
-			if (result) {
-				calculatorController.add(+result);
-				calculatorController.add(value);
-				const newHistoric = [...historic];
-				newHistoric[newHistoric.length - 1].result = `= ${result}`;
-				setHistoric(newHistoric);
-				setResult(null);
-				handleSetDisplayedValue({ value, isNum: false });
-				return;
-			}
-
-			if (operators.includes(displayedValue[displayedValue.length - 1])) {
-				return;
-			}
-			if (!lastValue) {
-				calculatorController.add(value);
-				handleSetDisplayedValue({ value, isNum: false });
-				return;
-			}
-
-			if (
-				typeof calculatorController.values[
-					calculatorController.values.length - 1
-				] === 'number'
-			) {
-				calculatorController.pushToLastValue(+lastValue);
-				calculatorController.add(value);
+		const operators = ['+', '-', 'x', '/'];
+		switch (type) {
+			case 'num':
+				if (result) {
+					const newHistoric = [...historic];
+					newHistoric[newHistoric.length - 1].result = `= ${result}`;
+					setHistoric(newHistoric);
+					setResult(null);
+				}
 				handleSetDisplayedValue({ value, isNum: true });
+				handleSetLastValue(value);
+				break;
+
+			case 'operator':
+				if (displayedValue.length === 0) {
+					return;
+				}
+
+				if (result) {
+					calculatorController.add(+result);
+					calculatorController.add(value);
+					const newHistoric = [...historic];
+					newHistoric[newHistoric.length - 1].result = `= ${result}`;
+					setHistoric(newHistoric);
+					setResult(null);
+					handleSetDisplayedValue({ value, isNum: false });
+					break;
+				}
+
+				if (operators.includes(displayedValue[displayedValue.length - 1])) return;
+
+				if (!lastValue) {
+					calculatorController.add(value);
+					handleSetDisplayedValue({ value, isNum: false });
+					break;
+				}
+
+				if (
+					typeof calculatorController.values[
+						calculatorController.values.length - 1
+					] === 'number'
+				) {
+					calculatorController.pushToLastValue(+lastValue);
+					calculatorController.add(value);
+					handleSetDisplayedValue({ value, isNum: true });
+					clearLastValue();
+				} else {
+					calculatorController.add(+lastValue);
+					calculatorController.add(value);
+					handleSetDisplayedValue({ value, isNum: false });
+					clearLastValue();
+				}
+				break;
+
+			case 'reset':
+				clearDisplayedValue();
 				clearLastValue();
-				return;
-			}
-			calculatorController.add(+lastValue);
-			calculatorController.add(value);
-			handleSetDisplayedValue({ value, isNum: false });
-			clearLastValue();
-			return;
-		}
-		if (type === 'reset') {
-			clearDisplayedValue();
-			clearLastValue();
-			setHistoric([]);
-			setResult(null);
-			calculatorController.reset();
-			return;
-		}
-		if (type === 'back') {
-			if (displayedValue.length === 0) {
-				return;
-			}
+				setHistoric([]);
+				setResult(null);
+				calculatorController.reset();
+				break;
 
-			if (lastValue) {
-				deleteOneDisplayedValue();
-				deleteOneLastValue();
-				return;
-			}
-			calculatorController.deleteOne();
-			deleteOneDisplayedValue();
-			return;
-		}
-		if (type === 'equal') {
-			if (lastValue) {
-				calculatorController.add(+lastValue);
-			}
+			case 'back':
+				if (displayedValue.length === 0) {
+					return;
+				}
 
-			calculatorController.equal();
-			setHistoric([
-				...historic,
-				{
-					result: null,
-					values: [...calculatorController.values],
-				} as HistoricProps,
-			]);
-			clearDisplayedValue();
-			clearLastValue();
-			setDisplayedValue([...calculatorController.result.toString()]);
-			setResult(calculatorController.result.toString());
+				if (lastValue) {
+					deleteOneDisplayedValue();
+					deleteOneLastValue();
+				} else {
+					calculatorController.deleteOne();
+					deleteOneDisplayedValue();
+				}
+				break;
 
-			calculatorController.reset();
+			case 'equal':
+				if (lastValue) {
+					calculatorController.add(+lastValue);
+				}
+
+				calculatorController.equal();
+				setHistoric([
+					...historic,
+					{
+						result: null,
+						values: [...calculatorController.values],
+					} as HistoricProps,
+				]);
+				clearDisplayedValue();
+				clearLastValue();
+				setDisplayedValue([...calculatorController.result.toString()]);
+				setResult(calculatorController.result.toString());
+
+				calculatorController.reset();
+				break;
+
+			default:
+				break;
 		}
 	};
 

@@ -4,9 +4,12 @@ import './CalculatorDisplay.css';
 import useCalculatorContext from '../../hooks/useCalculatorContext';
 import Historic from '../Historic/Historic';
 
-export default function CalculatorDispaly() {
+export default function CalculatorDisplay() {
 	const { theme } = useThemeContext();
 	const { displayedValue, result } = useCalculatorContext();
+
+	const renderResult =
+		result || (displayedValue.length === 0 ? '0' : displayedValue);
 
 	return (
 		<div className={`display__container ${theme}`}>
@@ -17,9 +20,7 @@ export default function CalculatorDispaly() {
 					className='result'
 					data-testid='test'
 				>
-					<span>
-						{result ? result : displayedValue.length === 0 ? '0' : displayedValue}
-					</span>
+					<span>{renderResult}</span>
 				</div>
 			</div>
 		</div>
