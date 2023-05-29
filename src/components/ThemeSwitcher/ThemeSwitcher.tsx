@@ -11,7 +11,7 @@ export default function ThemeSwitcher() {
 				className={`icon__container ${theme === 'white' ? 'active-white' : ''}`}
 			>
 				<FiSun
-					clasName='theme-sun__icon'
+					className='theme-sun__icon'
 					size={20}
 					cursor='pointer'
 					onClick={themeWhite}
