@@ -5,7 +5,7 @@ import useCalculatorContext from '../../hooks/useCalculatorContext';
 
 export default function CalculatorDispaly() {
 	const { theme } = useThemeContext();
-	const { displayedValue} = useCalculatorContext();
+	const { displayedValue } = useCalculatorContext();
 
 	return (
 		<div className={`display__container ${theme}`}>
@@ -17,7 +17,10 @@ export default function CalculatorDispaly() {
 					<span>500</span>
 				</div>
 				<div className='result'>
-					<span>{displayedValue}</span>
+					<span>
+						{displayedValue.length === 0 && '0'}
+						{displayedValue.length > 0 && displayedValue}
+					</span>
 				</div>
 			</div>
 		</div>
