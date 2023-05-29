@@ -1,6 +1,8 @@
 import { Calculator } from '../../functions/calculator';
 import { CalculatorController } from '../../functions/calculatorController';
 import useCalculatorContext from '../../hooks/useCalculatorContext';
+import useDisplayedValue from '../../hooks/useDisplayedValue';
+import useLastValue from '../../hooks/useLastValue';
 import useThemeContext from '../../hooks/useThemeContext';
 import './CalculatorButton.css';
 
@@ -29,16 +31,11 @@ export default function CalculatorButton({
 	type,
 }: Props) {
 	const { theme } = useThemeContext();
-	const {
-		displayedValue,
-		lastValue,
-		clearLastValue,
-		handleSetLastValue,
-		handleSetDisplayedValue,
-		deleteOneDisplayValue,
-		deleteOneLastValue,
-		clearDisplayValue,
-	} = useCalculatorContext();
+	const { displayedValue, lastValue } = useCalculatorContext();
+	const { clearLastValue, deleteOneLastValue, handleSetLastValue } =
+		useLastValue();
+	const { clearDisplayValue, deleteOneDisplayValue, handleSetDisplayedValue } =
+		useDisplayedValue();
 
 	const handleClick = () => {
 		if (type === 'num') {
