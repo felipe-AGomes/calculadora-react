@@ -391,6 +391,12 @@ describe('CalculatorButton', () => {
 						color='white'
 					/>
 					<CalculatorButton
+						type='num'
+						value='5'
+						button='5'
+						color='white'
+					/>
+					<CalculatorButton
 						type='operator'
 						value='+'
 						button='+'
@@ -444,7 +450,7 @@ describe('CalculatorButton', () => {
 		await userEvent.click(screen.getByRole('button', { name: '=' }));
 		expect(screen.getByTestId('test')).toHaveTextContent('12');
 
-		await userEvent.click(screen.getByRole('button', { name: '1' }));
-		expect(screen.getByTestId('test')).toHaveTextContent('1');
+		await userEvent.click(screen.getByRole('button', { name: '5' }));
+		expect(screen.getByTestId('test').textContent).toBe('5');
 	});
 });

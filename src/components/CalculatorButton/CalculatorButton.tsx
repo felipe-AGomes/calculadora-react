@@ -59,6 +59,9 @@ export default function CalculatorButton({
 					newHistoric[newHistoric.length - 1].result = `= ${result}`;
 					setHistoric(newHistoric);
 					setResult(null);
+					setDisplayedValue([value]);
+					handleSetLastValue(value);
+					return;
 				}
 				handleSetDisplayedValue({ value, isNum: true });
 				handleSetLastValue(value);
