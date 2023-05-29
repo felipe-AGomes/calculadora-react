@@ -1,0 +1,8 @@
+.operator__historic__content {
+	display: block;
+}
+
+.operator__historic {
+	color: var(--red-operators);
+	font-size: 0.8rem;
+}

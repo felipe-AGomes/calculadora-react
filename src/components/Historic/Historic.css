@@ -1,0 +1,7 @@
+.historic {
+	display: flex;
+	align-items: baseline;
+	gap: 3px;
+
+	font-size: 1rem;
+}
