@@ -6,7 +6,7 @@ function makeSut() {
 	return { sut };
 }
 
-describe.skip('calculator', () => {
+describe('calculator', () => {
 	describe('add', () => {
 		it('should add two numbers', () => {
 			const { sut } = makeSut();
