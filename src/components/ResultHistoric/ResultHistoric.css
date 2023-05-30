@@ -1,3 +1,5 @@
 .result__historic {
+	opacity: 0.7;
 	display: block;
+	margin-bottom: 7px;
 }
