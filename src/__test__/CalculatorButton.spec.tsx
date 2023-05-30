@@ -6,7 +6,7 @@ import ProviderController from '../components/Providers/ProviderController';
 import CalculatorDispaly from '../components/CalculatorDisplay/CalculatorDisplay';
 
 const renderCalculator = () => {
-	render(
+	const { debug } = render(
 		<ProviderController>
 			<>
 				<CalculatorDispaly />
@@ -73,15 +73,17 @@ const renderCalculator = () => {
 			</>
 		</ProviderController>,
 	);
+
+	return { debug };
 };
 
 describe('CalculatorButton', () => {
 	it('should add a number', async () => {
 		renderCalculator();
 
-		await userEvent.click(screen.getByRole('button'));
-		await userEvent.click(screen.getByRole('button'));
-		await userEvent.click(screen.getByRole('button'));
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
 		expect(screen.getByText('111')).toBeVisible();
 	});
 
@@ -209,6 +211,8 @@ describe('CalculatorButton', () => {
 	it('should continue if an operator is added after the result', async () => {
 		renderCalculator();
 
+		await userEvent.click(screen.getByRole('button', { name: 'AC' }));
+
 		await userEvent.click(screen.getByRole('button', { name: '1' }));
 		await userEvent.click(screen.getByRole('button', { name: '1' }));
 		await userEvent.click(screen.getByRole('button', { name: '+' }));
@@ -219,5 +223,63 @@ describe('CalculatorButton', () => {
 		await userEvent.click(screen.getByRole('button', { name: '+' }));
 		await userEvent.click(screen.getByRole('button', { name: '1' }));
 		expect(screen.getByTestId('test')).toHaveTextContent('12+1');
+	});
+
+	it('should clear the display and insert new values if an number is added after the result', async () => {
+		renderCalculator();
+
+		await userEvent.click(screen.getByRole('button', { name: 'AC' }));
+
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '+' }));
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '=' }));
+		expect(screen.getByTestId('test')).toHaveTextContent('12');
+
+		await userEvent.click(screen.getByRole('button', { name: '5' }));
+		expect(screen.getByTestId('test').textContent).toBe('5');
+	});
+});
+
+describe('Historic', () => {
+	it('shoul only keep on historic the calculation when the "equal" button is pressed', async () => {
+		renderCalculator();
+
+		await userEvent.click(screen.getByRole('button', { name: 'AC' }));
+
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '+' }));
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '=' }));
+		expect(screen.getByTestId('historic-test')).toHaveTextContent('11+1');
+
+		await userEvent.click(screen.getByRole('button', { name: 'AC' }));
+
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '-' }));
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '=' }));
+		expect(screen.getByTestId('historic-test')).toHaveTextContent('11-1');
+
+		await userEvent.click(screen.getByRole('button', { name: 'AC' }));
+
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: 'x' }));
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '=' }));
+		expect(screen.getByTestId('historic-test')).toHaveTextContent('11x1');
+
+		await userEvent.click(screen.getByRole('button', { name: 'AC' }));
+
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '/' }));
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '=' }));
+		expect(screen.getByTestId('historic-test')).toHaveTextContent('11/1');
 	});
 });

@@ -11,7 +11,7 @@ export default function ValuesHistoric() {
 			{historic.map((element, index) => {
 				return (
 					<React.Fragment key={index}>
-						<div className='operator__historic__content'>
+						<div className='operator__historic__content' data-testid='historic-test'>
 							{element.values.map((value, valueIndex) => {
 								return (
 									<span

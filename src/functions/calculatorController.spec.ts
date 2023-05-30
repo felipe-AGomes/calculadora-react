@@ -119,6 +119,40 @@ describe('CalculatorController', () => {
 			}).toThrow();
 		});
 
+		it('should keep the "values" property whitout any changes after calculation is done', () => {
+			const { sut } = makeSut();
+
+			sut.add(11);
+			sut.add('+');
+			sut.add(1);
+			sut.equal();
+			expect(sut.values).toEqual([11, '+', 1]);
+
+			sut.reset();
+
+			sut.add(11);
+			sut.add('-');
+			sut.add(1);
+			sut.equal();
+			expect(sut.values).toEqual([11, '-', 1]);
+
+			sut.reset();
+
+			sut.add(11);
+			sut.add('x');
+			sut.add(1);
+			sut.equal();
+			expect(sut.values).toEqual([11, 'x', 1]);
+
+			sut.reset();
+
+			sut.add(11);
+			sut.add('/');
+			sut.add(1);
+			sut.equal();
+			expect(sut.values).toEqual([11, '/', 1]);
+		});
+
 		it('should throw an error if the last element of "values" is a string', () => {
 			const { sut } = makeSut();
 

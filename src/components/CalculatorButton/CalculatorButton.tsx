@@ -132,10 +132,13 @@ export default function CalculatorButton({
 
 			case 'equal':
 				if (lastValue) {
+					console.log('primeiro');
 					calculatorController.add(+lastValue);
 				}
 
+				console.log('segundo');
 				calculatorController.equal();
+				console.log(calculatorController.values);
 				setHistoric([
 					...historic,
 					{

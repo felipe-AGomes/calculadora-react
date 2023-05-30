@@ -11,10 +11,12 @@ export interface ICalculatorController {
 
 export class CalculatorController implements ICalculatorController {
 	values: (string | number)[];
+	copyValues: (string | number)[];
 	result: number;
 
 	constructor(private readonly calculator: ICalculator) {
 		this.values = [];
+		this.copyValues = [];
 		this.result = 0;
 	}
 
@@ -59,29 +61,30 @@ export class CalculatorController implements ICalculatorController {
 			throw new Error('O último valor inserido não pode ser um operador');
 		}
 
+		this.copyValues = [...this.values];
+
 		this.calculateMultiplicationAndDivision();
 		this.calculateAdditionAndSubtraction();
 	}
 
 	private calculateMultiplicationAndDivision(): void {
 		let index = 0;
-
-		while (index < this.values.length) {
-			const value = this.values[index];
+		while (index < this.copyValues.length) {
+			const value = this.copyValues[index];
 
 			if (value === 'x') {
 				const result = this.calculator.multiply(
-					this.values[index - 1] as number,
-					this.values[index + 1] as number,
+					this.copyValues[index - 1] as number,
+					this.copyValues[index + 1] as number,
 				);
-				this.updateValues(index - 1, 3, result);
+				this.updateCopyValues(index - 1, 3, result);
 				index = 0;
 			} else if (value === '/') {
 				const result = this.calculator.divide(
-					this.values[index - 1] as number,
-					this.values[index + 1] as number,
+					this.copyValues[index - 1] as number,
+					this.copyValues[index + 1] as number,
 				);
-				this.updateValues(index - 1, 3, result);
+				this.updateCopyValues(index - 1, 3, result);
 				index = 0;
 			} else {
 				index++;
@@ -91,20 +94,20 @@ export class CalculatorController implements ICalculatorController {
 
 	private calculateAdditionAndSubtraction(): void {
 		let index = 0;
-		this.result = this.values[index] as number;
+		this.result = this.copyValues[index] as number;
 
-		while (index < this.values.length) {
-			const value = this.values[index];
+		while (index < this.copyValues.length) {
+			const value = this.copyValues[index];
 
 			if (value === '+') {
 				this.result = this.calculator.add(
 					this.result,
-					this.values[index + 1] as number,
+					this.copyValues[index + 1] as number,
 				);
 			} else if (value === '-') {
 				this.result = this.calculator.substract(
 					this.result,
-					this.values[index + 1] as number,
+					this.copyValues[index + 1] as number,
 				);
 			}
 
@@ -112,8 +115,12 @@ export class CalculatorController implements ICalculatorController {
 		}
 	}
 
-	private updateValues(startIndex: number, count: number, value: number): void {
-		this.values.splice(startIndex, count, value);
+	private updateCopyValues(
+		startIndex: number,
+		count: number,
+		value: number,
+	): void {
+		this.copyValues.splice(startIndex, count, value);
 	}
 	deleteOne(): void {
 		const newDisplayedValue = [...this.values];
