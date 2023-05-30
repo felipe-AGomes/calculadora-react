@@ -47,6 +47,12 @@ const renderCalculator = () => {
 					color='white'
 				/>
 				<CalculatorButton
+					type='dot'
+					value='.'
+					button='.'
+					color='white'
+				/>
+				<CalculatorButton
 					type='operator'
 					value='/'
 					button='/'
@@ -145,22 +151,24 @@ describe('CalculatorButton', () => {
 		await userEvent.click(screen.getByRole('button', { name: '1' }));
 		await userEvent.click(screen.getByRole('button', { name: '+' }));
 		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '.' }));
 		await userEvent.click(screen.getByRole('button', { name: '1' }));
-		expect(screen.getByText('11+11')).toBeVisible();
+		expect(screen.getByText('11+1.1')).toBeVisible();
 
 		await userEvent.click(screen.getByRole('button', { name: 'back' }));
-		expect(screen.getByTestId('test')).toHaveTextContent('11+1');
+		expect(screen.getByTestId('test')).toHaveTextContent('11+1.');
 
 		await userEvent.click(screen.getByRole('button', { name: '+' }));
-		expect(screen.getByTestId('test')).toHaveTextContent('11+1+');
+		expect(screen.getByTestId('test')).toHaveTextContent('11+1.+');
 
 		await userEvent.click(screen.getByRole('button', { name: 'back' }));
-		expect(screen.getByTestId('test')).toHaveTextContent('11+1');
+		expect(screen.getByTestId('test')).toHaveTextContent('11+1.');
 
 		await userEvent.click(screen.getByRole('button', { name: 'back' }));
 		await userEvent.click(screen.getByRole('button', { name: 'back' }));
-		expect(screen.getByTestId('test')).toHaveTextContent('11');
+		expect(screen.getByTestId('test')).toHaveTextContent('11+');
 
+		await userEvent.click(screen.getByRole('button', { name: 'back' }));
 		await userEvent.click(screen.getByRole('button', { name: '+' }));
 		expect(screen.getByTestId('test')).toHaveTextContent('11+');
 
@@ -170,18 +178,32 @@ describe('CalculatorButton', () => {
 		await userEvent.click(screen.getByRole('button', { name: 'back' }));
 		await userEvent.click(screen.getByRole('button', { name: 'back' }));
 		expect(screen.getByTestId('test')).toHaveTextContent('0');
+
+		await userEvent.click(screen.getByRole('button', { name: 'AC' }));
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '.' }));
+		await userEvent.click(screen.getByRole('button', { name: '2' }));
+		expect(screen.getByTestId('test').textContent).toBe('1.2');
+
+		await userEvent.click(screen.getByRole('button', { name: 'back' }));
+		await userEvent.click(screen.getByRole('button', { name: 'back' }));
+		expect(screen.getByTestId('test').textContent).toBe('1');
 	});
 
 	it('shoul perform all calculations correctly', async () => {
 		renderCalculator();
 
+		await userEvent.click(screen.getByRole('button', { name: 'AC' }));
+
 		await userEvent.click(screen.getByRole('button', { name: '2' }));
 		await userEvent.click(screen.getByRole('button', { name: '+' }));
+		await userEvent.click(screen.getByRole('button', { name: '2' }));
+		await userEvent.click(screen.getByRole('button', { name: '.' }));
 		await userEvent.click(screen.getByRole('button', { name: '2' }));
 		await userEvent.click(screen.getByRole('button', { name: '+' }));
 		await userEvent.click(screen.getByRole('button', { name: 'back' }));
 		await userEvent.click(screen.getByRole('button', { name: '=' }));
-		expect(screen.getByTestId('test')).toHaveTextContent('4');
+		expect(screen.getByTestId('test')).toHaveTextContent('4.2');
 
 		await userEvent.click(screen.getByRole('button', { name: 'AC' }));
 
@@ -206,6 +228,11 @@ describe('CalculatorButton', () => {
 		await userEvent.click(screen.getByRole('button', { name: '2' }));
 		await userEvent.click(screen.getByRole('button', { name: '=' }));
 		expect(screen.getByTestId('test')).toHaveTextContent('11');
+
+		await userEvent.click(screen.getByRole('button', { name: 'AC' }));
+		await userEvent.click(screen.getByRole('button', { name: '.' }));
+		await userEvent.click(screen.getByRole('button', { name: '=' }));
+		expect(screen.getByTestId('test').textContent).toBe('.');
 	});
 
 	it('should continue if an operator is added after the result', async () => {
@@ -281,5 +308,32 @@ describe('Historic', () => {
 		await userEvent.click(screen.getByRole('button', { name: '1' }));
 		await userEvent.click(screen.getByRole('button', { name: '=' }));
 		expect(screen.getByTestId('historic-test')).toHaveTextContent('11/1');
+	});
+
+	it('should correctly add the dots', async () => {
+		renderCalculator();
+
+		await userEvent.click(screen.getByRole('button', { name: 'AC' }));
+		await userEvent.click(screen.getByRole('button', { name: '.' }));
+		expect(screen.getByTestId('test').textContent).toBe('.');
+
+		await userEvent.click(screen.getByRole('button', { name: '2' }));
+		expect(screen.getByTestId('test').textContent).toBe('.2');
+
+		await userEvent.click(screen.getByRole('button', { name: 'AC' }));
+		await userEvent.click(screen.getByRole('button', { name: '.' }));
+		await userEvent.click(screen.getByRole('button', { name: '+' }));
+		expect(screen.getByTestId('test').textContent).toBe('.');
+
+		await userEvent.click(screen.getByRole('button', { name: '2' }));
+		expect(screen.getByTestId('test').textContent).toBe('.2');
+
+		await userEvent.click(screen.getByRole('button', { name: '.' }));
+		expect(screen.getByTestId('test').textContent).toBe('.2');
+
+		await userEvent.click(screen.getByRole('button', { name: 'AC' }));
+		await userEvent.click(screen.getByRole('button', { name: '.' }));
+		await userEvent.click(screen.getByRole('button', { name: '.' }));
+		expect(screen.getByTestId('test').textContent).toBe('.');
 	});
 });

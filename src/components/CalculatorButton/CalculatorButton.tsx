@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { HistoricProps } from '../../contexts/CalculatorContext';
 import { Calculator } from '../../functions/calculator';
 import { CalculatorController } from '../../functions/calculatorController';
@@ -54,6 +55,25 @@ export default function CalculatorButton({
 		const operators = ['+', '-', 'x', '/'];
 		switch (type) {
 			case 'dot':
+				if (
+					type === 'dot' &&
+					displayedValue.length > 0 &&
+					displayedValue[displayedValue.length - 1].includes('.')
+				) {
+					break;
+				} else if (result) {
+					const newHistoric = [...historic];
+					newHistoric[newHistoric.length - 1].result = `= ${result}`;
+					setHistoric(newHistoric);
+					setResult(null);
+					setDisplayedValue([value]);
+					handleSetLastValue(value);
+				} else {
+					handleSetDisplayedValue({ value, isNum: true });
+					handleSetLastValue(value);
+				}
+				break;
+
 			case 'num':
 				if (result) {
 					const newHistoric = [...historic];
@@ -62,14 +82,18 @@ export default function CalculatorButton({
 					setResult(null);
 					setDisplayedValue([value]);
 					handleSetLastValue(value);
-					return;
+				} else {
+					handleSetDisplayedValue({ value, isNum: true });
+					handleSetLastValue(value);
 				}
-				handleSetDisplayedValue({ value, isNum: true });
-				handleSetLastValue(value);
 				break;
 
 			case 'operator':
-				if (displayedValue.length === 0) {
+				if (
+					displayedValue.length === 0 ||
+					displayedValue[displayedValue.length - 1] === '.' ||
+					operators.includes(displayedValue[displayedValue.length - 1])
+				) {
 					return;
 				}
 
@@ -83,8 +107,6 @@ export default function CalculatorButton({
 					handleSetDisplayedValue({ value, isNum: false });
 					break;
 				}
-
-				if (operators.includes(displayedValue[displayedValue.length - 1])) return;
 
 				if (!lastValue) {
 					calculatorController.add(value);
@@ -132,14 +154,18 @@ export default function CalculatorButton({
 				break;
 
 			case 'equal':
+				if (
+					displayedValue.length === 0 ||
+					displayedValue[displayedValue.length - 1] === '.'
+				) {
+					return;
+				}
+
 				if (lastValue) {
-					console.log('primeiro');
 					calculatorController.add(+lastValue);
 				}
 
-				console.log('segundo');
 				calculatorController.equal();
-				console.log(calculatorController.values);
 				setHistoric([
 					...historic,
 					{
@@ -155,6 +181,16 @@ export default function CalculatorButton({
 				calculatorController.reset();
 				break;
 
+			// case 'reverse':
+			// 	if (!result) {
+			// 		return;
+			// 	}
+			// 	const resultToNumber = Number(result);
+			// 	const reversedNumber = -resultToNumber;
+
+			// 	setResult(reversedNumber.toString());
+
+			// 	break;
 			default:
 				break;
 		}
