@@ -53,6 +53,7 @@ export default function CalculatorButton({
 	const handleClick = () => {
 		const operators = ['+', '-', 'x', '/'];
 		switch (type) {
+			case 'dot':
 			case 'num':
 				if (result) {
 					const newHistoric = [...historic];
