@@ -1,10 +1,12 @@
 /* eslint-disable no-case-declarations */
-import { HistoricProps } from '../../contexts/CalculatorContext';
 import { Calculator } from '../../functions/calculator';
 import { CalculatorController } from '../../functions/calculatorController';
-import useCalculatorContext from '../../hooks/useCalculatorContext';
-import useDisplayedValue from '../../hooks/useDisplayedValue';
-import useLastValue from '../../hooks/useLastValue';
+import useButtonBack from '../../hooks/useButtonBack';
+import useButtonDot from '../../hooks/useButtonDot';
+import useButtonEqual from '../../hooks/useButtonEqual';
+import useButtonNumber from '../../hooks/useButtonNumber';
+import useButtonOperator from '../../hooks/useButtonOperator';
+import useButtonReset from '../../hooks/useButtonReset';
 import useThemeContext from '../../hooks/useThemeContext';
 import './CalculatorButton.css';
 
@@ -34,163 +36,38 @@ export default function CalculatorButton({
 	type,
 }: Props) {
 	const { theme } = useThemeContext();
-	const {
-		displayedValue,
-		lastValue,
-		result,
-		historic,
-		setResult,
-		setDisplayedValue,
-		setHistoric,
-	} = useCalculatorContext();
-	const { clearLastValue, deleteOneLastValue, handleSetLastValue } =
-		useLastValue();
-	const {
-		clearDisplayedValue,
-		deleteOneDisplayedValue,
-		handleSetDisplayedValue,
-	} = useDisplayedValue();
+	const buttonDot = useButtonDot();
+	const buttonNumber = useButtonNumber();
+	const buttonOperator = useButtonOperator();
+	const buttonReset = useButtonReset();
+	const buttonBack = useButtonBack();
+	const buttonEqual = useButtonEqual();
 
 	const handleClick = () => {
-		const operators = ['+', '-', 'x', '/'];
 		switch (type) {
 			case 'dot':
-				if (
-					type === 'dot' &&
-					displayedValue.length > 0 &&
-					displayedValue[displayedValue.length - 1].includes('.')
-				) {
-					break;
-				} else if (result) {
-					const newHistoric = [...historic];
-					newHistoric[newHistoric.length - 1].result = `= ${result}`;
-					setHistoric(newHistoric);
-					setResult(null);
-					setDisplayedValue([value]);
-					handleSetLastValue(value);
-				} else {
-					handleSetDisplayedValue({ value, isNum: true });
-					handleSetLastValue(value);
-				}
+				buttonDot.click(value);
 				break;
 
 			case 'num':
-				if (result) {
-					const newHistoric = [...historic];
-					newHistoric[newHistoric.length - 1].result = `= ${result}`;
-					setHistoric(newHistoric);
-					setResult(null);
-					setDisplayedValue([value]);
-					handleSetLastValue(value);
-				} else {
-					handleSetDisplayedValue({ value, isNum: true });
-					handleSetLastValue(value);
-				}
+				buttonNumber.click(value);
 				break;
 
 			case 'operator':
-				if (
-					displayedValue.length === 0 ||
-					displayedValue[displayedValue.length - 1] === '.' ||
-					operators.includes(displayedValue[displayedValue.length - 1])
-				) {
-					return;
-				}
-
-				if (result) {
-					calculatorController.add(+result);
-					calculatorController.add(value);
-					const newHistoric = [...historic];
-					newHistoric[newHistoric.length - 1].result = `= ${result}`;
-					setHistoric(newHistoric);
-					setResult(null);
-					handleSetDisplayedValue({ value, isNum: false });
-					break;
-				}
-
-				if (!lastValue) {
-					calculatorController.add(value);
-					handleSetDisplayedValue({ value, isNum: false });
-					break;
-				}
-
-				if (
-					typeof calculatorController.values[
-						calculatorController.values.length - 1
-					] === 'number'
-				) {
-					calculatorController.pushToLastValue(+lastValue);
-					calculatorController.add(value);
-					handleSetDisplayedValue({ value, isNum: true });
-					clearLastValue();
-				} else {
-					calculatorController.add(+lastValue);
-					calculatorController.add(value);
-					handleSetDisplayedValue({ value, isNum: false });
-					clearLastValue();
-				}
+				buttonOperator.click(value, calculatorController);
 				break;
 
 			case 'reset':
-				clearDisplayedValue();
-				clearLastValue();
-				setHistoric([]);
-				setResult(null);
-				calculatorController.reset();
+				buttonReset.click(calculatorController);
 				break;
 
 			case 'back':
-				if (displayedValue.length === 0) {
-					return;
-				}
-
-				if (lastValue) {
-					deleteOneDisplayedValue();
-					deleteOneLastValue();
-				} else {
-					calculatorController.deleteOne();
-					deleteOneDisplayedValue();
-				}
+				buttonBack.click(calculatorController);
 				break;
 
 			case 'equal':
-				if (
-					displayedValue.length === 0 ||
-					displayedValue[displayedValue.length - 1] === '.'
-				) {
-					return;
-				}
-
-				if (lastValue) {
-					calculatorController.add(+lastValue);
-				}
-
-				calculatorController.equal();
-				setHistoric([
-					...historic,
-					{
-						result: null,
-						values: [...calculatorController.values],
-					} as HistoricProps,
-				]);
-				clearDisplayedValue();
-				clearLastValue();
-				setDisplayedValue([...calculatorController.result.toString()]);
-				setResult(calculatorController.result.toString());
-
-				calculatorController.reset();
+				buttonEqual.click(calculatorController);
 				break;
-
-			// case 'reverse':
-			// 	if (!result) {
-			// 		return;
-			// 	}
-			// 	const resultToNumber = Number(result);
-			// 	const reversedNumber = -resultToNumber;
-
-			// 	setResult(reversedNumber.toString());
-
-			// 	break;
 			default:
 				break;
 		}
