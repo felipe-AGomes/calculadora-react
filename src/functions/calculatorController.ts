@@ -4,7 +4,7 @@ export interface ICalculatorController {
 	values: (string | number)[];
 	copyValues: (string | number)[];
 	result: number;
-	equal: (operator: string, n1: number, n2: number) => void;
+	equal: () => void;
 	reset: () => void;
 	deleteOne: () => void;
 	reverseSign: () => void;
