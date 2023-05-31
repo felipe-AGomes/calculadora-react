@@ -1,15 +1,14 @@
 import { ICalculatorController } from '../functions/calculatorController';
 import useCalculatorContext from './useCalculatorContext';
 import useDisplayedValue from './useDisplayedValue';
+import useHistoric from './useHistoric';
 import useLastValue from './useLastValue';
 
 export default function useButtonOperator() {
-	const { lastValue, displayedValue, result, historic, setHistoric, setResult } =
-		useCalculatorContext();
-
+	const { lastValue, displayedValue, result } = useCalculatorContext();
 	const { clearLastValue } = useLastValue();
-
 	const { handleSetDisplayedValue } = useDisplayedValue();
+	const { handleSetHistoric } = useHistoric();
 
 	function click(value: string, calculatorController: ICalculatorController) {
 		const operators = ['+', '-', 'x', '/'];
@@ -23,13 +22,7 @@ export default function useButtonOperator() {
 		}
 
 		if (result) {
-			calculatorController.add(+result);
-			calculatorController.add(value);
-			const newHistoric = [...historic];
-			newHistoric[newHistoric.length - 1].result = `= ${result}`;
-			setHistoric(newHistoric);
-			setResult(null);
-			handleSetDisplayedValue({ value, isNum: false });
+			handleSetHistoric(value, calculatorController);
 			return;
 		}
 

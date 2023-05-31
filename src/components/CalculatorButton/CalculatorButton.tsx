@@ -7,6 +7,7 @@ import useButtonEqual from '../../hooks/useButtonEqual';
 import useButtonNumber from '../../hooks/useButtonNumber';
 import useButtonOperator from '../../hooks/useButtonOperator';
 import useButtonReset from '../../hooks/useButtonReset';
+import useButtonReverse from '../../hooks/useButtonReverse';
 import useThemeContext from '../../hooks/useThemeContext';
 import './CalculatorButton.css';
 
@@ -21,7 +22,7 @@ type Props = {
 		| 'reverse'
 		| 'func'
 		| 'reset';
-	value: string;
+	value?: string;
 	button: string | JSX.Element;
 	color?: 'green' | 'red' | 'white';
 };
@@ -42,19 +43,27 @@ export default function CalculatorButton({
 	const buttonReset = useButtonReset();
 	const buttonBack = useButtonBack();
 	const buttonEqual = useButtonEqual();
+	const buttonReverse = useButtonReverse();
 
 	const handleClick = () => {
 		switch (type) {
 			case 'dot':
+				if (!value) return;
 				buttonDot.click(value);
 				break;
 
 			case 'num':
+				if (!value) return;
 				buttonNumber.click(value);
 				break;
 
 			case 'operator':
+				if (!value) return;
 				buttonOperator.click(value, calculatorController);
+				break;
+
+			case 'reverse':
+				buttonReverse.click(calculatorController);
 				break;
 
 			case 'reset':
@@ -68,6 +77,7 @@ export default function CalculatorButton({
 			case 'equal':
 				buttonEqual.click(calculatorController);
 				break;
+
 			default:
 				break;
 		}

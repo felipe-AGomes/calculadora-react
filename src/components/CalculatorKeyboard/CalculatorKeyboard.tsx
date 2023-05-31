@@ -13,13 +13,11 @@ export default function CalculatorKeyboard() {
 		<div className={`keyboard__container ${theme}`}>
 			<CalculatorButton
 				type='reset'
-				value='AC'
 				button='AC'
 				color='green'
 			/>
 			<CalculatorButton
 				type='reverse'
-				value='+/-'
 				button={<TbPlusMinus size={20} />}
 				color='green'
 			/>
@@ -100,7 +98,6 @@ export default function CalculatorKeyboard() {
 			/>
 			<CalculatorButton
 				type='back'
-				value='back'
 				button={<SlReload size={20} />}
 			/>
 			<CalculatorButton
@@ -115,7 +112,6 @@ export default function CalculatorKeyboard() {
 			/>
 			<CalculatorButton
 				type='equal'
-				value='='
 				button='='
 				color='red'
 			/>

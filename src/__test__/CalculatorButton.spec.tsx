@@ -76,6 +76,12 @@ const renderCalculator = () => {
 					button='AC'
 					color='white'
 				/>
+
+				<CalculatorButton
+					type='reverse'
+					button='reverse'
+					color='white'
+				/>
 			</>
 		</ProviderController>,
 	);
@@ -266,6 +272,29 @@ describe('CalculatorButton', () => {
 
 		await userEvent.click(screen.getByRole('button', { name: '5' }));
 		expect(screen.getByTestId('test').textContent).toBe('5');
+	});
+
+	it('should invert the signs correctly', async () => {
+		renderCalculator();
+
+		await userEvent.click(screen.getByRole('button', { name: 'AC' }));
+
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '+' }));
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		await userEvent.click(screen.getByRole('button', { name: '=' }));
+		expect(screen.getByTestId('test')).toHaveTextContent('12');
+
+		await userEvent.click(screen.getByRole('button', { name: 'reverse' }));
+		expect(screen.getByTestId('test')).toHaveTextContent('-12');
+
+		await userEvent.click(screen.getByRole('button', { name: '+' }));
+		await userEvent.click(screen.getByRole('button', { name: '1' }));
+		expect(screen.getByTestId('test')).toHaveTextContent('-12+1');
+
+		// await userEvent.click(screen.getByRole('button', { name: '=' }));
+		// expect(screen.getByTestId('test')).toHaveTextContent('-11');
 	});
 });
 
