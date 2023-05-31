@@ -293,8 +293,8 @@ describe('CalculatorButton', () => {
 		await userEvent.click(screen.getByRole('button', { name: '1' }));
 		expect(screen.getByTestId('test')).toHaveTextContent('-12+1');
 
-		// await userEvent.click(screen.getByRole('button', { name: '=' }));
-		// expect(screen.getByTestId('test')).toHaveTextContent('-11');
+		await userEvent.click(screen.getByRole('button', { name: '=' }));
+		expect(screen.getByTestId('test')).toHaveTextContent('-11');
 	});
 });
 

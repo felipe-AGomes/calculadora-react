@@ -87,7 +87,9 @@ export default function CalculatorButton({
 		<button
 			onClick={handleClick}
 			type='button'
-			className={`button ${theme} ${color === 'white' ? '' : color}`}
+			className={`button ${theme} ${color === 'white' ? '' : color} ${
+				type === 'equal' && 'equal'
+			}`}
 		>
 			{button}
 		</button>

@@ -22,15 +22,15 @@ export default function CalculatorKeyboard() {
 				color='green'
 			/>
 			<CalculatorButton
-				type='percent'
-				value='%'
-				button={<FiPercent size={20} />}
+				type='operator'
+				value='/'
+				button={<RiDivideFill size={21} />}
 				color='green'
 			/>
 			<CalculatorButton
 				type='operator'
-				value='/'
-				button={<RiDivideFill size={21} />}
+				value='x'
+				button='X'
 				color='red'
 			/>
 			<CalculatorButton
@@ -50,8 +50,8 @@ export default function CalculatorKeyboard() {
 			/>
 			<CalculatorButton
 				type='operator'
-				value='x'
-				button='X'
+				value='-'
+				button='-'
 				color='red'
 			/>
 			<CalculatorButton
@@ -71,8 +71,8 @@ export default function CalculatorKeyboard() {
 			/>
 			<CalculatorButton
 				type='operator'
-				value='-'
-				button='-'
+				value='+'
+				button='+'
 				color='red'
 			/>
 			<CalculatorButton
@@ -91,9 +91,8 @@ export default function CalculatorKeyboard() {
 				button='3'
 			/>
 			<CalculatorButton
-				type='operator'
-				value='+'
-				button='+'
+				type='equal'
+				button='='
 				color='red'
 			/>
 			<CalculatorButton
@@ -109,11 +108,6 @@ export default function CalculatorKeyboard() {
 				type='dot'
 				value='.'
 				button=','
-			/>
-			<CalculatorButton
-				type='equal'
-				button='='
-				color='red'
 			/>
 		</div>
 	);
