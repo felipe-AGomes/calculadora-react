@@ -6,10 +6,10 @@ import useLastValue from './useLastValue';
 export default function useButtonBack() {
 	const { deleteOneDisplayedValue } = useDisplayedValue();
 	const { deleteOneLastValue } = useLastValue();
-	const { displayedValue, lastValue } = useCalculatorContext();
+	const { displayedValue, lastValue, result } = useCalculatorContext();
 
 	function click(calculatorController: ICalculatorController) {
-		if (displayedValue.length === 0) {
+		if (displayedValue.length === 0 || result) {
 			return;
 		}
 
