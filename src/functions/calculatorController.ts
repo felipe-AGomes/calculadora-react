@@ -1,6 +1,9 @@
 import { ICalculator } from './calculator';
 
 export interface ICalculatorController {
+	values: (string | number)[];
+	copyValues: (string | number)[];
+	result: number;
 	equal: (operator: string, n1: number, n2: number) => void;
 	reset: () => void;
 	deleteOne: () => void;
