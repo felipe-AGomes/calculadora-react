@@ -1,5 +1,4 @@
 import { RiDivideFill } from 'react-icons/ri';
-import { FiPercent } from 'react-icons/fi';
 import { TbPlusMinus } from 'react-icons/tb';
 import { SlReload } from 'react-icons/sl';
 import useThemeContext from '../../hooks/useThemeContext';
